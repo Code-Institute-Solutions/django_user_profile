@@ -1,6 +1,9 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect
 from django.contrib import messages, auth
 from django.core.urlresolvers import reverse
+from .forms import UserLoginForm
+from django.template.context_processors import csrf
+
 
 
 # Create your views here.
@@ -13,3 +16,30 @@ def logout(request):
     auth.logout(request)
     messages.success(request, 'You have successfully logged out')
     return redirect(reverse('index'))
+
+
+def login(request):
+    """A view that manages the login form"""
+    if request.method == 'POST':
+        user_form = UserLoginForm(request.POST)
+        if user_form.is_valid():
+            user = auth.authenticate(username=request.POST['username_or_email'],
+                                     password=request.POST['password'])
+
+            if user:
+                auth.login(request, user)
+                messages.error(request, "You have successfully logged in")
+
+                if request.GET and request.GET['next'] !='':
+                    next = request.GET['next']
+                    return HttpResponseRedirect(next)
+                else:
+                    return redirect(reverse('index'))
+            else:
+                user_form.add_error(None, "Your username or password are incorrect")
+    else:
+        user_form = UserLoginForm()
+
+    args = {'user_form': user_form, 'next': request.GET.get('next', '')}
+    args.update(csrf(request))
+    return render(request, 'login.html', args)
