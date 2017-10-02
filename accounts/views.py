@@ -6,10 +6,9 @@ from django.template.context_processors import csrf
 from django.contrib.auth.decorators import login_required
 
 
-
-
 # Create your views here.
 def index(request):
+    """A view that displays the index page"""
     return render(request, "index.html")
     
     
@@ -59,7 +58,7 @@ def register(request):
         if user_form.is_valid():
             user_form.save()
 
-            user = auth.authenticate(request.POST.get('username'),
+            user = auth.authenticate(username=request.POST.get('username'),
                                      password=request.POST.get('password1'))
 
             if user:
