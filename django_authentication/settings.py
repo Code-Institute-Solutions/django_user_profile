@@ -25,7 +25,7 @@ SECRET_KEY = 'w_dw+qj+yy#)!um$s%eb#$0e8jt1n8$nbqrm@+j7yj8h34#(4@'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['django-authentication-richardadalton.c9users.io']
+ALLOWED_HOSTS = ['django-user-profile-richardadalton.c9users.io']
 
 
 # Application definition
